@@ -1,389 +1,215 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión de Inventario - Supabase</title>
-  <!-- Supabase JS Client desde CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f4f6f8;
-      color: #333;
-    }
-    h1, h2 {
-      color: #1a252f;
-    }
-    .container {
-      max-width: 1000px;
-      margin: auto;
-    }
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-    .form-group.full-width {
-      grid-column: 1 / -1;
-    }
-    label {
-      font-weight: bold;
-      margin-bottom: 5px;
-      font-size: 0.9em;
-    }
-    input, select, textarea {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1em;
-    }
-    button {
-      background-color: #2e7d32;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9em;
-      margin-top: 5px;
-    }
-    button:hover {
-      background-color: #1b5e20;
-    }
-    .btn-edit {
-      background-color: #0277bd;
-    }
-    .btn-edit:hover {
-      background-color: #01579b;
-    }
-    .btn-delete {
-      background-color: #c62828;
-    }
-    .btn-delete:hover {
-      background-color: #b71c1c;
-    }
-    .btn-cancel {
-      background-color: #757575;
-      display: none;
-    }
-    .btn-cancel:hover {
-      background-color: #616161;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      background: white;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-      font-size: 0.9em;
-    }
-    th {
-      background-color: #f1f1f1;
-    }
-    .actions-cell {
-      display: flex;
-      gap: 5px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lo que aprendí del video</title>
+
+    <link rel="stylesheet" href="estilo.css">
 </head>
+
 <body>
 
-<div class="container">
-  <h1>Gestión de Equipos e Inventario</h1>
+    <header>
+        <h1>Lo que aprendí del video</h1>
+        <p>Supabase, Tutorial Práctico y Overview (REST API)</p>
+        <p><strong>Estudiante:</strong> Jorge Barrientos</p>
+        <p><strong>Curso:</strong> 2BTI</p>
+    </header>
 
-  <!-- Formulario de Registro / Edición -->
-  <div class="card">
-    <h2 id="formTitle">Registrar Nuevo Equipo</h2>
-    <form id="equipoForm">
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="codigo">Código:</label>
-          <input type="text" id="codigo" required placeholder="Ej: ARD-001">
-        </div>
-        <div class="form-group">
-          <label for="nombre">Nombre:</label>
-          <input type="text" id="nombre" required placeholder="Ej: Arduino Uno R3">
-        </div>
-        <div class="form-group">
-          <label for="categoria_id">Categoría:</label>
-          <select id="categoria_id" required>
-            <option value="">Cargando...</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="marca_id">Marca:</label>
-          <select id="marca_id" onchange="onMarcaChange()">
-            <option value="">Seleccione marca...</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="modelo_id">Modelo:</label>
-          <select id="modelo_id">
-            <option value="">Seleccione primero una marca</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="cantidad">Cantidad:</label>
-          <input type="number" id="cantidad" value="1" min="0" required>
-        </div>
-        <div class="form-group">
-          <label for="estado_id">Estado:</label>
-          <select id="estado_id" required>
-            <option value="">Cargando...</option>
-          </select>
-        </div>
-        <div class="form-group full-width">
-          <label for="descripcion">Descripción:</label>
-          <textarea id="descripcion" rows="2" placeholder="Información adicional..."></textarea>
-        </div>
-      </div>
-      <button type="submit" id="btnSubmit">Guardar Equipo</button>
-      <button type="button" id="btnCancelar" class="btn-cancel" onclick="cancelarEdicion()">Cancelar Edición</button>
-    </form>
-  </div>
+    <nav>
+        <a href="#introduccion">Introducción</a>
+        <a href="#conceptos">Conceptos</a>
+        <a href="#preguntas">Cuestionario</a>
+        <a href="#aplicacion">Aplicación</a>
+        <a href="#conclusion">Conclusión</a>
+    </nav>
 
-  <!-- Tabla de Equipos -->
-  <div class="card">
-    <h2>Listado de Equipos</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Código</th>
-          <th>Nombre</th>
-          <th>Categoría</th>
-          <th>Marca</th>
-          <th>Modelo</th>
-          <th>Cant.</th>
-          <th>Estado</th>
-          <th>Descripción</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="tablaEquipos">
-        <tr><td colspan="9">Cargando datos...</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+    <main>
 
-<script>
-  // 1. Configuración de Supabase
-  const SUPABASE_URL = 'https://xbsdoskuxiliglehqruw.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhic2Rvc2t1eGlsaWdsZWhxcnV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk2NTk4NDEsImV4cCI6MjEwNTIzNTg0MX0.h2XgMC3u9FaE_pJri9IDfdvrUrB3cjZC8bzYsVcS0Ls';
-  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        <section id="introduccion">
+            <h2>Introducción</h2>
 
-  // Variable de estado para controlar edición
-  let equipoEditandoId = null;
+            <p>
+                En esta tarea aprendi mas sobre la plataforma supabase y con
+                el video aprendi a usar REST API y como proteger lso datos con RLS
+            </p>
+        </section>
 
-  // Inicialización
-  document.addEventListener('DOMContentLoaded', () => {
-    cargarCatalogos();
-    cargarEquipos();
-  });
 
-  // 2. Cargar listas desplegables
-  async function cargarCatalogos() {
-    const { data: categorias } = await _supabase.from('categorias').select('*').order('nombre');
-    const selectCat = document.getElementById('categoria_id');
-    selectCat.innerHTML = '<option value="">Seleccionar Categoría</option>';
-    categorias?.forEach(c => selectCat.innerHTML += `<option value="${c.id}">${c.nombre}</option>`);
+        <section id="conceptos">
+            <h2>Conceptos fundamentales</h2>
 
-    const { data: marcas } = await _supabase.from('marcas').select('*').order('nombre');
-    const selectMarca = document.getElementById('marca_id');
-    selectMarca.innerHTML = '<option value="">Sin Marca / Seleccionar</option>';
-    marcas?.forEach(m => selectMarca.innerHTML += `<option value="${m.id}">${m.nombre}</option>`);
+            <div class="tarjetas">
 
-    const { data: estados } = await _supabase.from('estados').select('*').order('id');
-    const selectEst = document.getElementById('estado_id');
-    selectEst.innerHTML = '<option value="">Seleccionar Estado</option>';
-    estados?.forEach(e => selectEst.innerHTML += `<option value="${e.id}">${e.nombre}</option>`);
-  }
+                <article>
+                    <h3>Supabase</h3>
+                    <p>
+                        Es una plataforma que permite crear servicios de
+                        backend y trabajar con bases de datos.
+                    </p>
+                </article>
 
-  // 3. Filtrar modelos al seleccionar marca (acepta un modeloPredeterminado opcional)
-  async function onMarcaChange(modeloPredeterminadoId = null) {
-    const marcaId = document.getElementById('marca_id').value;
-    const selectModelo = document.getElementById('modelo_id');
-    
-    if (!marcaId) {
-      selectModelo.innerHTML = '<option value="">Seleccione primero una marca</option>';
-      return;
-    }
+                <article>
+                    <h3>Base de datos</h3>
+                    <p>
+                        Es el lugar donde se almacenan y organizan
+                        diferentes tipos de información.
+                    </p>
+                </article>
 
-    selectModelo.innerHTML = '<option value="">Cargando modelos...</option>';
+                <article>
+                    <h3>REST API</h3>
+                    <p>
+                        Permite que una aplicación se comunique con
+                        una base de datos mediante solicitudes.
+                    </p>
+                </article>
 
-    const { data: modelos } = await _supabase
-      .from('modelos')
-      .select('*')
-      .eq('marca_id', marcaId)
-      .order('nombre');
+                <article>
+                    <h3>RLS</h3>
+                    <p>
+                        Es un sistema de seguridad que permite controlar
+                        quién puede acceder a determinados datos.
+                    </p>
+                </article>
 
-    selectModelo.innerHTML = '<option value="">Sin Modelo / Seleccionar</option>';
-    modelos?.forEach(m => {
-      const selected = m.id === modeloPredeterminadoId ? 'selected' : '';
-      selectModelo.innerHTML += `<option value="${m.id}" ${selected}>${m.nombre}</option>`;
-    });
-  }
+            </div>
+        </section>
 
-  // 4. Cargar y listar equipos
-  async function cargarEquipos() {
-    const { data: equipos, error } = await _supabase
-      .from('equipos')
-      .select(`
-        *,
-        categorias (nombre),
-        marcas (nombre),
-        modelos (nombre),
-        estados (nombre)
-      `)
-      .order('id', { ascending: false });
 
-    const tbody = document.getElementById('tablaEquipos');
-    tbody.innerHTML = '';
+        <section id="preguntas">
+            <h2>Cuestionario</h2>
 
-    if (error) {
-      console.error(error);
-      tbody.innerHTML = '<tr><td colspan="9">Error al cargar datos. Verificar credenciales.</td></tr>';
-      return;
-    }
+            <h3>1. ¿Cuál es el tema principal del video?</h3>
+            <p>
+                Es sobre la plataforma supabase y su forma de utilizar y todas las 
+                funcines que tiene y explicar tambien como usar REST API.
+            </p>
 
-    if (!equipos || equipos.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="9">No hay equipos registrados.</td></tr>';
-      return;
-    }
+            <h3>2. ¿Qué problema tecnológico se aborda?</h3>
+            <p>
+                Se explica cómo crear un backend y una base de datos
+                para una aplicación sin tener que desarrollar toda
+                la infraestructura desde cero.
+            </p>
 
-    equipos.forEach(eq => {
-      // Escapar comillas para evitar errores JS al pasar parámetros a la función
-      const eqJSON = JSON.stringify(eq).replace(/'/g, "&apos;");
-      
-      tbody.innerHTML += `
-        <tr>
-          <td><strong>${eq.codigo}</strong></td>
-          <td>${eq.nombre}</td>
-          <td>${eq.categorias?.nombre || '-'}</td>
-          <td>${eq.marcas?.nombre || '-'}</td>
-          <td>${eq.modelos?.nombre || '-'}</td>
-          <td>${eq.cantidad}</td>
-          <td>${eq.estados?.nombre || '-'}</td>
-          <td>${eq.descripcion || ''}</td>
-          <td class="actions-cell">
-            <button class="btn-edit" onclick='prepararEdicion(${eqJSON})'>✏️ Editar</button>
-            <button class="btn-delete" onclick="eliminarEquipo(${eq.id})">🗑️ Eliminar</button>
-          </td>
-        </tr>
-      `;
-    });
-  }
+            <h3>3. ¿Cuáles son los conceptos más importantes?</h3>
+            <p>
+                Supabase, base de datos, REST API, tablas y RLS.
+            </p>
 
-  // 5. Preparar formulario para Editar
-  async function prepararEdicion(eq) {
-    equipoEditandoId = eq.id;
+            <h3>4. ¿Qué herramientas se mencionan?</h3>
+            <p>
+                Supabase, PostgreSQL, REST API y herramientas para
+                realizar pruebas de solicitudes.
+            </p>
 
-    // Cambiar textos del formulario
-    document.getElementById('formTitle').textContent = 'Editar Equipo (ID: ' + eq.id + ')';
-    document.getElementById('btnSubmit').textContent = 'Actualizar Equipo';
-    document.getElementById('btnCancelar').style.display = 'inline-block';
+            <h3>5. ¿Qué procedimientos se explican?</h3>
+            <p>
+                Crear un proyecto, crear una tabla, agregar datos,
+                utilizar la REST API y configurar la seguridad.
+            </p>
 
-    // Rellenar campos simples
-    document.getElementById('codigo').value = eq.codigo;
-    document.getElementById('nombre').value = eq.nombre;
-    document.getElementById('categoria_id').value = eq.categoria_id || '';
-    document.getElementById('cantidad').value = eq.cantidad;
-    document.getElementById('estado_id').value = eq.estado_id || '';
-    document.getElementById('descripcion').value = eq.descripcion || '';
+            <h3>6. ¿Qué ejemplos prácticos aparecen?</h3>
+            <p>
+                Se muestra cómo crear tablas y trabajar con sus
+                registros utilizando la API.
+            </p>
 
-    // Manejar marca y sus modelos dependientes
-    document.getElementById('marca_id').value = eq.marca_id || '';
-    if (eq.marca_id) {
-      await onMarcaChange(eq.modelo_id);
-    } else {
-      document.getElementById('modelo_id').innerHTML = '<option value="">Seleccione primero una marca</option>';
-    }
+            <h3>7. ¿Qué conocimientos previos son necesarios?</h3>
+            <p>
+                Es recomendable conocer conceptos básicos de bases
+                de datos, programación web, API y HTTP.
+            </p>
 
-    // Desplazar la pantalla hacia arriba al formulario
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+            <h3>8. ¿Qué beneficios ofrece?</h3>
+            <p>
+                Facilita la creación de un backend y permite trabajar
+                con bases de datos y diferentes servicios desde una
+                misma plataforma.
+            </p>
 
-  // 6. Cancelar modo edición
-  function cancelarEdicion() {
-    equipoEditandoId = null;
-    document.getElementById('equipoForm').reset();
-    document.getElementById('formTitle').textContent = 'Registrar Nuevo Equipo';
-    document.getElementById('btnSubmit').textContent = 'Guardar Equipo';
-    document.getElementById('btnCancelar').style.display = 'none';
-    document.getElementById('modelo_id').innerHTML = '<option value="">Seleccione primero una marca</option>';
-  }
+            <h3>9. ¿Qué precauciones deben considerarse?</h3>
+            <p>
+                Se deben configurar correctamente los permisos y las
+                reglas de seguridad para evitar accesos no autorizados.
+            </p>
 
-  // 7. Eliminar Equipo
-  async function eliminarEquipo(id) {
-    if (!confirm('¿Estás seguro de que deseas eliminar este equipo del inventario?')) return;
+            <h3>10. ¿Cómo lo aplicaría en un proyecto real?</h3>
+            <p>
+                Podría utilizarlo para crear una página web escolar
+                que almacene estudiantes, materias, tareas o usuarios.
+            </p>
 
-    const { error } = await _supabase.from('equipos').delete().eq('id', id);
+            <h3>11. ¿Qué parte considero más importante?</h3>
+            <p>
+                Considero importante la REST API y la seguridad RLS
+                porque permiten trabajar con los datos y protegerlos.
+            </p>
 
-    if (error) {
-      alert('Error al eliminar: ' + error.message);
-    } else {
-      alert('Equipo eliminado correctamente');
-      if (equipoEditandoId === id) cancelarEdicion();
-      cargarEquipos();
-    }
-  }
+            <h3>12. ¿Qué conocimientos nuevos adquirí?</h3>
+            <p>
+                Aprendí cómo Supabase permite trabajar con bases de
+                datos y cómo una API puede comunicarse con ellas.
+            </p>
 
-  // 8. Evento Submit (Guardar o Actualizar)
-  document.getElementById('equipoForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+        </section>
 
-    const datosEquipo = {
-      codigo: document.getElementById('codigo').value,
-      nombre: document.getElementById('nombre').value,
-      categoria_id: parseInt(document.getElementById('categoria_id').value),
-      marca_id: document.getElementById('marca_id').value ? parseInt(document.getElementById('marca_id').value) : null,
-      modelo_id: document.getElementById('modelo_id').value ? parseInt(document.getElementById('modelo_id').value) : null,
-      cantidad: parseInt(document.getElementById('cantidad').value),
-      estado_id: parseInt(document.getElementById('estado_id').value),
-      descripcion: document.getElementById('descripcion').value
-    };
 
-    let response;
+        <section id="aplicacion">
+            <h2>Aplicación práctica</h2>
 
-    if (equipoEditandoId) {
-      // Modo Actualización (UPDATE)
-      response = await _supabase
-        .from('equipos')
-        .update(datosEquipo)
-        .eq('id', equipoEditandoId);
-    } else {
-      // Modo Creación (INSERT)
-      response = await _supabase
-        .from('equipos')
-        .insert([datosEquipo]);
-    }
+            <p>
+                Una aplicación práctica sería crear una página web
+                escolar conectada a Supabase. La página podría guardar
+                información de estudiantes, materias y tareas.
+            </p>
 
-    if (response.error) {
-      alert('Error: ' + response.error.message);
-    } else {
-      alert(equipoEditandoId ? 'Equipo actualizado con éxito' : 'Equipo registrado con éxito');
-      cancelarEdicion();
-      cargarEquipos();
-    }
-  });
-</script>
+            <ol>
+                <li>Crear un proyecto en Supabase.</li>
+                <li>Crear una base de datos.</li>
+                <li>Crear una tabla.</li>
+                <li>Agregar registros.</li>
+                <li>Conectar la aplicación mediante REST API.</li>
+                <li>Configurar las reglas de seguridad.</li>
+            </ol>
+        </section>
+
+
+        <section id="conclusion">
+            <h2>Conclusión</h2>
+
+            <p>
+                El video me ayudó a comprender mejor cómo funcionan
+                las bases de datos, las API y los servicios backend.
+                Supabase me parece una herramienta útil porque facilita
+                el desarrollo de aplicaciones y permite trabajar con
+                información de manera organizada y segura.
+            </p>
+        </section>
+
+
+        <section>
+            <h2>Fuente</h2>
+
+            <p>
+                Video: Supabase, Tutorial Práctico y Overview (REST API)
+            </p>
+
+            <a class="boton"
+               href="https://www.youtube.com/watch?v=pi33WDrgfpI"
+               target="_blank">
+                Ver video
+            </a>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Trabajo de Informática - 2BTI</p>
+        <p>Jorge Barrientos</p>
+    </footer>
 
 </body>
 </html>

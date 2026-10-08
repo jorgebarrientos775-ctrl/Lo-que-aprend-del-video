@@ -7,6 +7,19 @@
     <title>Lo que aprendí del video - Supabase</title>
 
     <style>
+.imagen {
+    display: block;
+    width: 80%;
+    max-width: 600px;
+    margin: 25px auto;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    transition: 0.3s;
+}
+
+.imagen:hover {
+    transform: scale(1.03);
+}
 
         /* =========================
            CONFIGURACIÓN GENERAL

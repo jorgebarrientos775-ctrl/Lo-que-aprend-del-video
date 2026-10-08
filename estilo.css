@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lo que aprendí del video - Supabase</title>
+
+    <style>
+
+        /* =========================
+           CONFIGURACIÓN GENERAL
+        ========================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            background: linear-gradient(135deg, #ffffff, #fff5f0);
+            color: #222;
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           ENCABEZADO
+        ========================== */
+
+        header {
+            background:
+                linear-gradient(135deg, #450000, #a80000, #ff4d00);
+
+            color: white;
+            text-align: center;
+            padding: 55px 20px;
+
+            border-bottom: 5px solid #ff6a00;
+
+            box-shadow:
+                0 5px 25px rgba(180, 0, 0, 0.5);
+        }
+
+        header h1 {
+            font-size: 45px;
+            margin-bottom: 10px;
+
+            text-shadow:
+                0 0 10px #ff4500,
+                0 0 20px #ff0000;
+        }
+
+        header h2 {
+            font-size: 25px;
+            color: #ffe0d0;
+            margin-bottom: 20px;
+        }
+
+        header p {
+            font-size: 18px;
+        }
+
+
+        /* =========================
+           MENÚ
+        ========================== */
+
+        nav {
+            background: #850000;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            padding: 20px;
+            gap:12px;
+
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        nav a {
+            position: relative;
+
+            width: 230px;
+            text-align: center;
+
+            padding: 12px 20px;
+
+            color: white;
+            background: linear-gradient(
+                90deg,
+                #a00000,
+                #e52b00
+            );
+
+            border: 2px solid #ff6500;
+            border-radius: 10px;
+
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+
+            overflow: hidden;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease,
+                background 0.3s ease;
+        }
+
+
+        /* EFECTO DE LEVANTARSE */
+
+        nav a:hover {
+            transform: translateY(-7px) scale(1.04);
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #d00000,
+                    #ff5a00
+                );
+
+            box-shadow:
+                0 8px 20px rgba(255, 50, 0, 0.7),
+                0 0 25px rgba(255, 90, 0, 0.8);
+        }
+
+
+        /* EFECTO FLASH */
+
+        nav a::after {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -100%;
+
+            width: 60%;
+            height: 100%;
+
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255,255,255,0.8),
+                transparent
+            );
+
+            transform: skewX(-25deg);
+        }
+
+        nav a:hover::after {
+            animation: flash 0.6s ease;
+        }
+
+        @keyframes flash {
+
+            from {
+                left: -100%;
+            }
+
+            to {
+                left: 150%;
+            }
+
+        }
+
+
+        /* =========================
+           CONTENIDO
+        ========================== */
+
+        main {
+            width: 90%;
+            max-width: 1100px;
+
+            margin: 40px auto;
+        }
+
+
+        /* =========================
+           SECCIONES VERTICALES
+        ========================== */
+
+        section {
+            background: white;
+
+            margin-bottom: 30px;
+            padding: 30px;
+
+            border-radius: 15px;
+
+            border-left: 8px solid #d00000;
+            border-right: 3px solid #ff6500;
+
+            box-shadow:
+                0 5px 20px rgba(150,0,0,0.15);
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 12px 30px rgba(200,0,0,0.25),
+                0 0 15px rgba(255,90,0,0.15);
+        }
+
+
+        section h2 {
+            color: #b00000;
+
+            font-size: 30px;
+
+            margin-bottom: 15px;
+
+            border-bottom: 3px solid #ff6500;
+
+            padding-bottom: 8px;
+        }
+
+        section h3 {
+            color: #d33a00;
+
+            font-size: 21px;
+
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+
+        section p {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+
+        /* =========================
+           TARJETAS DE CONCEPTOS
+        ========================== */
+
+        .tarjetas {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .tarjeta {
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff,
+                    #fff0eb
+                );
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            border: 2px solid #ff5a00;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .tarjeta:hover {
+            transform: translateY(-8px);
+
+            box-shadow:
+                0 10px 25px rgba(220,0,0,0.3),
+                0 0 20px rgba(255,90,0,0.5);
+        }
+
+        .tarjeta h3 {
+            color: #a00000;
+            margin-top: 0;
+        }
+
+
+        /* =========================
+           PREGUNTAS
+        ========================== */
+
+        .pregunta {
+            padding: 18px;
+
+            margin: 15px 0;
+
+            background: #fff8f5;
+
+            border-left: 5px solid #ff5500;
+
+            border-radius: 8px;
+
+            transition: 0.3s;
+        }
+
+        .pregunta:hover {
+            transform: translateX(8px);
+
+            background: #fff0eb;
+
+            box-shadow:
+                0 0 15px rgba(255,70,0,0.25);
+        }
+
+        .pregunta strong {
+            color: #a00000;
+            font-size: 19px;
+        }
+
+
+        /* =========================
+           LISTAS
+        ========================== */
+
+        ol,
+        ul {
+            margin-left: 30px;
+
+            font-size: 18px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+
+        /* =========================
+           BOTÓN VIDEO
+        ========================== */
+
+        .boton-video {
+            display: inline-block;
+
+            position: relative;
+
+            margin-top: 15px;
+
+            padding: 13px 30px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #a00000,
+                    #ff5200
+                );
+
+            color: white;
+
+            border: 2px solid #ff7100;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            font-size: 19px;
+            font-weight: bold;
+
+            overflow: hidden;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .boton-video:hover {
+            transform: translateY(-6px);
+
+            box-shadow:
+                0 8px 25px rgba(255,60,0,0.7),
+                0 0 25px rgba(255,90,0,0.8);
+        }
+
+        .boton-video::after {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -120%;
+
+            width: 70%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    transparent,
+                    rgba(255,255,255,0.9),
+                    transparent
+                );
+
+            transform: skewX(-25deg);
+        }
+
+        .boton-video:hover::after {
+            animation: flash 0.6s ease;
+        }
+
+
+        /* =========================
+           PIE DE PÁGINA
+        ========================== */
+
+        footer {
+            background:
+                linear-gradient(
+                    135deg,
+                    #450000,
+                    #a00000,
+                    #ff4d00
+                );
+
+            color: white;
+
+            text-align: center;
+
+            padding: 30px;
+
+            margin-top: 40px;
+
+            border-top: 4px solid #ff7100;
+        }
+
+        footer p {
+            font-size: 17px;
+            margin: 5px;
+        }
+
+
+        /* =========================
+           CELULARES
+        ========================== */
+
+        @media (max-width: 600px) {
+
+            header {
+                padding: 40px 15px;
+            }
+
+            header h1 {
+                font-size: 32px;
+            }
+
+            header h2 {
+                font-size: 20px;
+            }
+
+            main {
+                width: 94%;
+            }
+
+            section {
+                padding: 20px;
+            }
+
+            section h2 {
+                font-size: 26px;
+            }
+
+            nav a {
+                width: 90%;
+            }
+
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         ENCABEZADO
+    ========================== -->
+
+    <header>
+
+        <h1>Lo que aprendí del video</h1>
+
+        <h2>
+            Supabase, Tutorial Práctico y Overview (REST API)
+        </h2>
+
+        <p>
+            <strong>Estudiante:</strong> Jorge Barrientos
+        </p>
+
+        <p>
+            <strong>Curso:</strong> 2BTIC
+        </p>
+
+    </header>
+
+
+    <!-- =========================
+         MENÚ VERTICAL
+    ========================== -->
+
+    <nav>
+
+        <a href="#introduccion">
+            Introducción
+        </a>
+
+        <a href="#conceptos">
+            Conceptos fundamentales
+        </a>
+
+        <a href="#cuestionario">
+            Cuestionario
+        </a>
+
+        <a href="#aplicacion">
+            Aplicación práctica
+        </a>
+
+        <a href="#conclusion">
+            Conclusión
+        </a>
+
+    </nav>
+
+
+    <main>
+
+
+        <!-- =========================
+             INTRODUCCIÓN
+        ========================== -->
+
+        <section id="introduccion">
+
+            <h2>1. Introducción</h2>
+
+            <p>
+                En este trabajo aprendí sobre Supabase, una plataforma
+                que permite crear y administrar bases de datos y
+                servicios de backend.
+            </p>
+
+            <p>
+                El video explica el funcionamiento de Supabase,
+                la creación de tablas, el uso de REST API y la
+                seguridad mediante RLS.
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             CONCEPTOS
+        ========================== -->
+
+        <section id="conceptos">
+
+            <h2>2. Conceptos fundamentales</h2>
+
+            <div class="tarjetas">
+
+                <div class="tarjeta">
+
+                    <h3>Supabase</h3>
+
+                    <p>
+                        Es una plataforma que permite crear servicios
+                        de backend y trabajar con bases de datos.
+                    </p>
+
+                </div>
+
+
+                <div class="tarjeta">
+
+                    <h3>Base de datos</h3>
+
+                    <p>
+                        Es el lugar donde se almacena y organiza
+                        información de manera estructurada.
+                    </p>
+
+                </div>
+
+
+                <div class="tarjeta">
+
+                    <h3>REST API</h3>
+
+                    <p>
+                        Permite que una aplicación se comunique
+                        con una base de datos mediante solicitudes.
+                    </p>
+
+                </div>
+
+
+                <div class="tarjeta">
+
+                    <h3>RLS</h3>
+
+                    <p>
+                        Es una función de seguridad que permite
+                        controlar quién puede acceder a determinados
+                        datos.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CUESTIONARIO
+        ========================== -->
+
+        <section id="cuestionario">
+
+            <h2>3. Cuestionario</h2>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    1. ¿Cuál es el tema principal del video?
+                </strong>
+
+                <p>
+                    El tema principal es Supabase y su utilización
+                    para crear y administrar bases de datos mediante
+                    una REST API.
+                </p>
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    2. ¿Qué problema o necesidad tecnológica se aborda?
+                </strong>
+
+                <p>
+                    Se aborda la necesidad de crear un backend y
+                    una base de datos para una aplicación de forma
+                    más sencilla.
+                </p>
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    3. ¿Cuáles son los conceptos más importantes?
+                </strong>
+
+                <p>
+                    Supabase, base de datos, REST API, tablas y RLS.
+                </p>
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    4. ¿Qué herramientas o tecnologías se mencionan?
+                </strong>
+
+                <p>
+                    Se mencionan Supabase, PostgreSQL, REST API
+                    y herramientas para realizar solicitudes.
+                </p>
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    5. ¿Qué procedimientos se explican?
+                </strong>
+
+                <p>
+                    Crear un proyecto, crear tablas, agregar datos,
+                    utilizar la REST API y configurar la seguridad.
+                </p>
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    6. ¿Qué ejemplos prácticos aparecen?
+                </strong>
+
+                <p>
+                    Se muestra cómo crear tablas y trabajar con
+                    sus registros mediante la API.
+                </p>
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    7. ¿Qué conocimientos previos son necesarios?
+                </strong>
+
+                <p>
+                    Es útil conocer conceptos básicos de bases de
+                    datos, programación web, API y HTTP.
+                </p>
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    8. ¿Qué ventajas ofrece?
+                </strong>
+
+                <p>
+                    Facilita la creación de un backend y permite
+                    trabajar con bases de datos y otros servicios.
+                </p>
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    9. ¿Qué dificultades o precauciones existen?
+                </strong>
+
+                <p>
+                    Es importante configurar correctamente los
+                    permisos y las reglas de seguridad para evitar
+                    accesos no autorizados.
+                </p>
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    10. ¿Cómo lo aplicarías en un proyecto real?
+                </strong>
+
+                <p>
+                    Podría utilizarlo para crear una página web
+                    escolar que almacene estudiantes, materias
+                    y tareas.
+                </p>
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    11. ¿Qué parte del video consideras más importante?
+                </strong>
+
+                <p>
+                    La REST API y la seguridad RLS son importantes
+                    porque permiten trabajar con los datos y
+                    protegerlos.
+                </p>
+
+            </div>
+
+
+            <div class="pregunta">
+
+                <strong>
+                    12. ¿Qué conocimientos nuevos adquiriste?
+                </strong>
+
+                <p>
+                    Aprendí cómo Supabase permite trabajar con
+                    bases de datos y cómo una API puede comunicarse
+                    con ellas.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             APLICACIÓN
+        ========================== -->
+
+        <section id="aplicacion">
+
+            <h2>4. Aplicación práctica</h2>
+
+            <p>
+                Una aplicación práctica sería crear una página web
+                escolar conectada a Supabase.
+            </p>
+
+            <p>
+                La página podría guardar información de estudiantes,
+                materias y tareas.
+            </p>
+
+            <h3>Pasos:</h3>
+
+            <ol>
+
+                <li>
+                    Crear un proyecto en Supabase.
+                </li>
+
+                <li>
+                    Crear una base de datos.
+                </li>
+
+                <li>
+                    Crear una tabla.
+                </li>
+
+                <li>
+                    Agregar registros.
+                </li>
+
+                <li>
+                    Conectar la aplicación mediante REST API.
+                </li>
+
+                <li>
+                    Configurar las reglas de seguridad.
+                </li>
+
+            </ol>
+
+        </section>
+
+
+        <!-- =========================
+             CONCLUSIÓN
+        ========================== -->
+
+        <section id="conclusion">
+
+            <h2>5. Conclusión</h2>
+
+            <p>
+                El video me ayudó a comprender mejor cómo funcionan
+                las bases de datos, las API y los servicios backend.
+            </p>
+
+            <p>
+                Supabase me parece una herramienta útil porque
+                facilita el desarrollo de aplicaciones y permite
+                trabajar con la información de manera organizada
+                y segura.
+            </p>
+
+
+            <h3>Fuente</h3>
+
+            <p>
+                Supabase, Tutorial Práctico y Overview (REST API)
+            </p>
+
+            <a
+                class="boton-video"
+                href="https://www.youtube.com/watch?v=pi33WDrgfpI"
+                target="_blank">
+
+                ▶ Ver video
+
+            </a>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+         PIE DE PÁGINA
+    ========================== -->
+
+    <footer>
+
+        <p>
+            Trabajo de Informática - 2BTIC
+        </p>
+
+        <p>
+            Jorge Barrientos
+        </p>
+
+    </footer>
+
+
+</body>
+</html>
